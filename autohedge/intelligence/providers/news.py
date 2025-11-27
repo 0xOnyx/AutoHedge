@@ -135,3 +135,4 @@ class NewsProvider(IntelligenceProvider):
         
         return (pos_count - neg_count) / total
 
+

@@ -135,3 +135,4 @@ class MacroProvider(IntelligenceProvider):
         
         return (tailwind_count - risk_count) / total
 
+

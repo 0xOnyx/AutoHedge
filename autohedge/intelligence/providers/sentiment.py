@@ -129,3 +129,4 @@ class SentimentProvider(IntelligenceProvider):
         
         return (bullish_count - bearish_count) / total
 
+

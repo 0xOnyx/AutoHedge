@@ -191,3 +191,4 @@ class TechnicalProvider(IntelligenceProvider):
         
         return (bull_count - bear_count) / total
 
+

@@ -177,3 +177,4 @@ def get_market_data(stock: str) -> Dict[str, Any]:
         'formatted': data.formatted,
     }
 
+

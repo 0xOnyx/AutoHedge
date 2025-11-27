@@ -184,3 +184,4 @@ class TradingStateMachine:
         """Check if state machine has reached complete state."""
         return self._state == TradingState.COMPLETE
 
+

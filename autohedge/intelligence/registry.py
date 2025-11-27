@@ -249,3 +249,4 @@ class IntelligenceRegistry:
         self._providers.clear()
         logger.info("Registry cleared")
 
+

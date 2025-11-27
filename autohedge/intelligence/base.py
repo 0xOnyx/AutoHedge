@@ -141,3 +141,4 @@ class IntelligenceProvider(ABC):
         """Validate if this provider can analyze the given stock."""
         return True  # Override in subclasses if needed
 
+

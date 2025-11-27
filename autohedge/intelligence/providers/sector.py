@@ -135,3 +135,4 @@ class SectorProvider(IntelligenceProvider):
         
         return (pos_count - neg_count) / total
 
+

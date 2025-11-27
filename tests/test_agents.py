@@ -104,3 +104,4 @@ class TestAgentFactory:
         
         assert director1 is director2
 
+

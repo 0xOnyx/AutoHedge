@@ -176,3 +176,4 @@ ADDITIONAL MARKET INTELLIGENCE:
         assert "APPROVED" in expected_text
         assert "REJECTED" in expected_text
 
+

@@ -54,3 +54,4 @@ class Config:
         """Create Config from dictionary."""
         return cls(**{k: v for k, v in data.items() if k in cls.__dataclass_fields__})
 
+

@@ -209,3 +209,4 @@ class TestTradingCycleResult:
         assert "Buy thesis" in string_output
         assert "approved" in string_output
 
+

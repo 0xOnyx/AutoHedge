@@ -38,3 +38,4 @@ class RiskDecision(str, Enum):
     APPROVED = "approved"
     REJECTED = "rejected"
 
+

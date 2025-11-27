@@ -94,3 +94,4 @@ Your key responsibilities include:
 By following these guidelines, you will ensure that trades are executed efficiently, minimizing potential losses and maximizing profit opportunities."""
 )
 
+
