@@ -1,8 +1,5 @@
-swarms
-tickr-agent
+crewai
+yfinance
 pydantic
 loguru
-swarm-models
-fastapi 
-uvicorn 
-requests 
+python-dotenv

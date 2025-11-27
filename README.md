@@ -1,509 +1,288 @@
 # AutoHedge 🚀
 
-[![Join our Discord](https://img.shields.io/badge/Discord-Join%20our%20server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/agora-999382051935506503) [![Subscribe on YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@kyegomez3242) [![Connect on LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kye-g-38759a207/) [![Follow on X.com](https://img.shields.io/badge/X.com-Follow-1DA1F2?style=for-the-badge&logo=x&logoColor=white)](https://x.com/kyegomezb)
+Automated Trading Insights System using Crew AI.
 
+A multi-agent trading system that provides comprehensive market analysis,
+quantitative insights, risk assessment, and trade recommendations with
+**scalable intelligence providers** for enriched decision making.
 
-[![PyPI version](https://badge.fury.io/py/autohedge.svg)](https://badge.fury.io/py/autohedge)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Documentation Status](https://readthedocs.org/projects/autohedge/badge/?version=latest)](https://autohedge.readthedocs.io)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+## 📁 Project Structure
 
-Build your autonomous hedge fund in minutes. AutoHedge harnesses the power of swarm intelligence and AI agents to automate market analysis, risk management, and trade execution.
+```
+autohedge/
+├── __init__.py              # Main exports
+├── autohedge.py             # Main AutoHedge class
+│
+├── core/                    # Core module
+│   ├── config.py            # Configuration management
+│   ├── enums.py             # TradingState, RiskDecision enums
+│   └── models.py            # Pydantic data models
+│
+├── agents/                  # AI Agents module
+│   ├── factory.py           # Agent creation factory
+│   └── prompts.py           # Agent role definitions
+│
+├── data/                    # Data module
+│   └── market.py            # Market data provider (yfinance)
+│
+├── trading/                 # Trading module
+│   ├── cycle.py             # Trading cycle orchestration
+│   ├── state_machine.py     # State machine management
+│   └── tasks.py             # Task factory for agents
+│
+└── intelligence/            # Scalable Intelligence module ⭐
+    ├── base.py              # Base provider interface
+    ├── registry.py          # Provider registry
+    └── providers/           # Intelligence providers
+        ├── earnings.py      # 📊 Real quarterly earnings (Yahoo Finance)
+        ├── news_scraper.py  # 📰 Real financial news (Yahoo Finance)
+        ├── sentiment.py     # 🧠 AI sentiment analysis
+        ├── macro.py         # 🌍 AI macroeconomic analysis
+        ├── sector.py        # 🏭 AI sector dynamics
+        ├── technical.py     # 📈 AI technical analysis
+        └── news.py          # 📰 AI news analysis
+```
 
-## 🌟 Features
+## 🏗️ Architecture
 
-- **Multi-Agent Architecture**: Leverages specialized AI agents for different aspects of trading
-  - Director Agent for strategy and thesis generation
-  - Quant Agent for technical analysis
-  - Risk Management Agent for position sizing and risk assessment
-  - Execution Agent for trade implementation
+### Intelligence Provider Types
 
-- **Real-Time Market Analysis**: Integrates with market data providers for live analysis
-- **Risk-First Approach**: Built-in risk management and position sizing
-- **Structured Output**: JSON-formatted trade recommendations and analysis
-- **Comprehensive Logging**: Detailed logging system for trade tracking and debugging
-- **Extensible Framework**: Easy to customize and extend with new capabilities
-
-## 📋 Requirements
-
-- Python 3.8+
-- `swarms` package
-- `tickr-agent`
-- Additional dependencies listed in `requirements.txt`
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Intelligence Registry                        │
+│                                                                 │
+│  📊 DATA PROVIDERS              🧠 AI PROVIDERS                  │
+│  (Real Data from Internet)     (LLM-Powered Analysis)          │
+│  ┌──────────────────┐          ┌────────────────┐              │
+│  │ EarningsProvider │          │SentimentProvider│              │
+│  │ • Quarterly EPS  │          │ • Social media │              │
+│  │ • Revenue        │          │ • Analyst views│              │
+│  │ • Growth metrics │          └────────────────┘              │
+│  └──────────────────┘          ┌────────────────┐              │
+│  ┌──────────────────┐          │  MacroProvider │              │
+│  │NewsScraperProvider│         │ • Interest rates│             │
+│  │ • Real headlines │          │ • Inflation    │              │
+│  │ • Publisher info │          │ • GDP growth   │              │
+│  │ • Publish dates  │          └────────────────┘              │
+│  └──────────────────┘          + more AI providers...          │
+│                                                                 │
+│         └────────────────────┬──────────────────────────────────┘
+│                              ▼                                  │
+│              ┌───────────────────────┐                          │
+│              │  Aggregated Insights  │                          │
+│              └───────────────────────┘                          │
+│                          │                                      │
+│                          ▼                                      │
+│              ┌───────────────────────┐                          │
+│              │ Enhanced Risk Assessment│                         │
+│              └───────────────────────┘                          │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ## 🚀 Quick Start
 
 ### Installation
 
 ```bash
-pip install -U autohedge
+pip install -r requirements.txt
 ```
 
 ### Environment Variables
 
+Create a `.env` file:
+
 ```bash
-OPENAI_API_KEY=""
-WORKSPACE_DIR="agent_workspace"
+OPENAI_API_KEY="your-openai-api-key"
 ```
 
 ### Basic Usage
 
 ```python
-# Example usage
 from autohedge import AutoHedge
 
-# Define the stocks to analyze
-stocks = ["NVDA"]
+# Simple usage without intelligence
+hedge = AutoHedge(
+    stocks=["NVDA", "TSLA", "MSFT"],
+    llm_model="gpt-4o-mini",
+)
 
-# Initialize the trading system with the specified stocks
-trading_system = AutoHedge(stocks)
-
-# Define the task for the trading cycle
-task = "Let's analyze nvidia to see if we should buy it, we have 50k$ in allocation"
-
-# Run the trading cycle and print the results
-print(trading_system.run(task=task))
-
+results = hedge.run(
+    task="Analyze AI companies for a balanced portfolio"
+)
+print(results)
 ```
 
-## 🏗️ Architecture
-
-AutoHedge uses a multi-agent architecture where each agent specializes in a specific aspect of the trading process:
-
-```mermaid
-graph TD
-    A[Director Agent] --> B[Quant Agent]
-    B --> C[Risk Manager]
-    C --> D[Execution Agent]
-    D --> E[Trade Output]
-```
-
-### Agent Roles
-
-1. **Director Agent**
-   - Generates trading theses
-   - Coordinates overall strategy
-   - Analyzes market conditions
-
-2. **Quant Agent**
-   - Performs technical analysis
-   - Evaluates statistical patterns
-   - Calculates probability scores
-
-3. **Risk Manager**
-   - Assesses trade risks
-   - Determines position sizing
-   - Sets risk parameters
-
-4. **Execution Agent**
-   - Generates trade orders
-   - Sets entry/exit points
-   - Manages order execution
-
-## 📊 Output Format
-
-AutoHedge generates structured output using Pydantic models:
+### With Data Providers (Real Data from Internet)
 
 ```python
-class AutoHedgeOutput(BaseModel):
-    id: str                         # Unique identifier
-    name: Optional[str]             # Strategy name
-    description: Optional[str]      # Strategy description
-    stocks: Optional[List[str]]     # List of stocks
-    task: Optional[str]             # Analysis task
-    thesis: Optional[str]           # Trading thesis
-    risk_assessment: Optional[str]  # Risk analysis
-    order: Optional[Dict]           # Trade order details
-    timestamp: str                  # Timestamp
-    current_stock: str              # Current stock being analyzed
+from autohedge import AutoHedge
+
+# Enable real data providers for earnings and news
+hedge = AutoHedge(
+    stocks=["NVDA"],
+    llm_model="gpt-4o-mini",
+    enable_intelligence=True,
+    intelligence_providers=[
+        "earnings",      # Real quarterly earnings from Yahoo Finance
+        "news_scraper",  # Real financial news from Yahoo Finance
+    ],
+)
+
+results = hedge.run(task="Analyze with real market data")
 ```
 
-## 🔧 Configuration
-
-AutoHedge can be configured through environment variables or initialization parameters:
+### With Full Intelligence (Data + AI Analysis)
 
 ```python
-trading_system = AutoHedge(
-    name="CustomStrategy",
-    description="My Trading Strategy",
-    stocks=["NVDA", "AAPL"],
-    output_dir="custom_outputs"
+from autohedge import AutoHedge
+
+hedge = AutoHedge(
+    stocks=["NVDA"],
+    llm_model="gpt-4o-mini",
+    enable_intelligence=True,
+    intelligence_providers=[
+        # Data providers (real data)
+        "earnings",
+        "news_scraper",
+        # AI analysis providers
+        "sentiment",
+        "macro",
+        "sector",
+    ],
+)
+
+results = hedge.run(task="Complete analysis with all intelligence")
+```
+
+### Run from Command Line
+
+```bash
+python main.py
+```
+
+## 🧠 Intelligence Providers
+
+### 📊 Data Providers (Real Data from Internet)
+
+| Provider | Description | Data Source |
+|----------|-------------|-------------|
+| `earnings` | Quarterly earnings, EPS, revenue, growth | Yahoo Finance |
+| `news_scraper` | Real financial headlines and news | Yahoo Finance |
+
+### 🤖 AI Analysis Providers (LLM-Powered)
+
+| Provider | Description | Risk Impact |
+|----------|-------------|-------------|
+| `sentiment` | Market sentiment from social/analysts | ±30% |
+| `macro` | Macroeconomic factors analysis | ±40% |
+| `sector` | Sector dynamics and competition | ±25% |
+| `technical` | Advanced technical analysis | ±20% |
+| `news` | AI-powered news sentiment | ±35% |
+
+### Data Provider Details
+
+#### EarningsProvider 📊
+```python
+# Data retrieved:
+- Quarterly earnings history (last 4 quarters)
+- EPS (Earnings Per Share) - trailing and forward
+- Revenue and revenue growth
+- Profit margins (gross, operating, net)
+- P/E ratio and PEG ratio
+- Upcoming earnings date
+- Earnings surprises (beat/miss history)
+```
+
+#### NewsScraperProvider 📰
+```python
+# Data retrieved:
+- Recent headlines (up to 10 articles)
+- Publisher information
+- Publication dates
+- News sentiment analysis
+- Categorization (positive/negative/neutral)
+- Related tickers
+```
+
+### Adding Custom Providers
+
+```python
+from autohedge import AutoHedge, IntelligenceProvider, IntelligenceResult
+from autohedge.intelligence.base import IntelligenceType
+
+class ESGProvider(IntelligenceProvider):
+    @property
+    def name(self) -> str:
+        return "esg_analyzer"
+    
+    @property
+    def intelligence_type(self) -> IntelligenceType:
+        return IntelligenceType.CUSTOM
+    
+    def analyze(self, stock, context=None) -> IntelligenceResult:
+        # Your analysis logic here
+        return IntelligenceResult(
+            provider_name=self.name,
+            intelligence_type=self.intelligence_type,
+            stock=stock,
+            summary="ESG analysis results",
+            confidence=0.8,
+            risk_impact=0.1,
+        )
+
+# Use custom provider
+hedge = AutoHedge(stocks=["NVDA"], enable_intelligence=True)
+hedge.add_intelligence_provider(ESGProvider())
+```
+
+## 🔧 Configuration Options
+
+```python
+AutoHedge(
+    # Basic
+    stocks=["NVDA"],           # Stock symbols to analyze
+    name="my-fund",            # System name
+    output_type="str",         # Output format: "str", "list", "dict"
+    max_retries=3,             # Max retries on risk rejection
+    llm_model="gpt-4o-mini",   # LLM model to use
+    
+    # Intelligence
+    enable_intelligence=True,  # Enable intelligence system
+    intelligence_providers=[   # Providers to enable (None = all)
+        # Data providers
+        "earnings",            # Real earnings data
+        "news_scraper",        # Real news data
+        # AI providers
+        "sentiment",
+        "macro",
+        "sector",
+        "technical",
+        "news",
+    ],
 )
 ```
 
+## 🔄 Flow Explanation
 
-## 📝 Logging
-
-AutoHedge uses the `loguru` library for comprehensive logging:
-
-```python
-logger.add(
-    "trading_system_{time}.log",
-    rotation="500 MB",
-    retention="10 days",
-    level="INFO",
-    format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}"
-)
-```
-
-## 🔍 Advanced Usage
-
-### Custom Agent Configuration
-
-```python
-from autohedge import TradingDirector, QuantAnalyst, RiskManager
-
-# Custom director configuration
-director = TradingDirector(
-    stocks=["NVDA", "AAPL"],
-    output_dir="custom_outputs"
-)
-
-# Custom analysis
-analysis = director.generate_thesis(
-    task="Generate comprehensive analysis",
-    stock="NVDA"
-)
-```
-
-### Risk Management
-
-```python
-from autohedge import RiskManager
-
-risk_manager = RiskManager()
-assessment = risk_manager.assess_risk(
-    stock="NVDA",
-    thesis=thesis,
-    quant_analysis=analysis
-)
-```
-
-# Diagrams
-
-## 🏗️ System Architecture
-
-### High-Level Component Overview
-```mermaid
-flowchart TB
-    subgraph Client
-        A[AutoHedge Client] --> B[Trading System]
-    end
-    
-    subgraph Agents["Multi-Agent System"]
-        B --> C{Director Agent}
-        C --> D[Quant Agent]
-        C --> E[Risk Agent]
-        C --> F[Execution Agent]
-        
-        D --> G[Technical Analysis]
-        D --> H[Statistical Analysis]
-        
-        E --> I[Risk Assessment]
-        E --> J[Position Sizing]
-        
-        F --> K[Order Generation]
-        F --> L[Trade Execution]
-    end
-    
-    subgraph Output
-        K --> M[JSON Output]
-        L --> N[Trade Logs]
-    end
-```
-
-### Trading Cycle Sequence
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant D as Director
-    participant Q as Quant
-    participant R as Risk
-    participant E as Execution
-    
-    C->>D: Initialize Trading Cycle
-    activate D
-    D->>D: Generate Thesis
-    D->>Q: Request Analysis
-    activate Q
-    Q-->>D: Return Analysis
-    deactivate Q
-    D->>R: Request Risk Assessment
-    activate R
-    R-->>D: Return Risk Profile
-    deactivate R
-    D->>E: Generate Order
-    activate E
-    E-->>D: Return Order Details
-    deactivate E
-    D-->>C: Return Complete Analysis
-    deactivate D
-```
-
-### Trade State Machine
-```mermaid
-stateDiagram-v2
-    [*] --> Initialization
-    Initialization --> ThesisGeneration
-    
-    ThesisGeneration --> QuantAnalysis
-    QuantAnalysis --> RiskAssessment
-    
-    RiskAssessment --> OrderGeneration: Risk Approved
-    RiskAssessment --> ThesisGeneration: Risk Rejected
-    
-    OrderGeneration --> OrderExecution
-    OrderExecution --> Monitoring
-    
-    Monitoring --> ThesisGeneration: New Cycle
-    Monitoring --> [*]: Complete
-```
-
-### Data Flow
-```mermaid
-flowchart LR
-    subgraph Input
-        A[Market Data] --> B[Technical Indicators]
-        A --> C[Fundamental Data]
-    end
-    
-    subgraph Processing
-        B --> D[Quant Analysis]
-        C --> D
-        D --> E[Risk Analysis]
-        E --> F[Order Generation]
-    end
-    
-    subgraph Output
-        F --> G[Trade Orders]
-        F --> H[Risk Reports]
-        F --> I[Performance Metrics]
-    end
-```
-
-### Class Structure
-```mermaid
-classDiagram
-    class AutoHedge {
-        +String name
-        +String description
-        +List stocks
-        +Path output_dir
-        +run()
-    }
-    
-    class TradingDirector {
-        +Agent director_agent
-        +TickrAgent tickr
-        +generate_thesis()
-    }
-    
-    class QuantAnalyst {
-        +Agent quant_agent
-        +analyze()
-    }
-    
-    class RiskManager {
-        +Agent risk_agent
-        +assess_risk()
-    }
-    
-    class ExecutionAgent {
-        +Agent execution_agent
-        +generate_order()
-    }
-    
-    AutoHedge --> TradingDirector
-    AutoHedge --> QuantAnalyst
-    AutoHedge --> RiskManager
-    AutoHedge --> ExecutionAgent
-```
-
-
-
-### API Documentation
-To use the API, git clone the repo: 
-
-### 1. Installation
-```bash
-pip3 install -r requirements.txt
-```
-
-### 2. Launch API Server
-
-```bash
-python api.py
-```
-
-Server will start at `http://localhost:8000`
-
-## API Endpoints
-
-### Authentication
-All endpoints except `/users` (POST) require the `X-API-Key` header.
-
-### User Management
-
-#### Create User
-```bash
-POST /users
-Content-Type: application/json
-
-{
-    "username": "trader1",
-    "email": "trader@example.com",
-    "fund_name": "Alpha Fund",
-    "fund_description": "AI Trading Strategy"
-}
-```
-Returns API key in response.
-
-#### Get User Profile
-```bash
-GET /users/me
-X-API-Key: your-api-key
-```
-
-### Trading Operations
-
-#### Create Trade
-```bash
-POST /trades
-X-API-Key: your-api-key
-Content-Type: application/json
-
-{
-    "stocks": ["NVDA", "AAPL"],
-    "task": "Analyze tech stocks for $1M allocation",
-    "allocation": 1000000.0,
-    "strategy_type": "momentum",
-    "risk_level": 7
-}
-```
-
-#### List Trades
-```bash
-GET /trades?limit=10&skip=0&status=completed
-X-API-Key: your-api-key
-```
-
-#### Get Specific Trade
-```bash
-GET /trades/{trade_id}
-X-API-Key: your-api-key
-```
-
-#### Delete Trade
-```bash
-DELETE /trades/{trade_id}
-X-API-Key: your-api-key
-```
-
-### Analytics
-
-#### Get Historical Analytics
-```bash
-GET /analytics/history?days=30
-X-API-Key: your-api-key
-```
-
-## Quick Test Script
-
-```python
-import requests
-
-BASE_URL = "http://localhost:8000"
-
-# Create user and get API key
-def get_api_key():
-    response = requests.post(
-        f"{BASE_URL}/users",
-        json={
-            "username": "test_trader",
-            "email": "test@example.com",
-            "fund_name": "Test Fund",
-            "fund_description": "Test Strategy"
-        }
-    )
-    return response.json()["api_key"]
-
-# Use the API
-api_key = get_api_key()
-headers = {"X-API-Key": api_key}
-
-# Create a trade
-trade = requests.post(
-    f"{BASE_URL}/trades",
-    headers=headers,
-    json={
-        "stocks": ["NVDA"],
-        "task": "Test trade",
-        "allocation": 1000000.0
-    }
-)
-print(trade.json())
-```
-
-## Running in Production
-1. Use a production ASGI server:
-
-```bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
-```
-
-2. Set environment variables:
-
-```bash
-export AUTOHEDGE_ENV=production
-export AUTOHEDGE_LOG_LEVEL=INFO
-```
-
-## Error Codes
-- 401: Invalid API key
-- 403: Unauthorized access
-- 404: Resource not found
-- 422: Validation error
-- 500: Server error
-
-## Best Practices
-1. Store API keys securely
-2. Use appropriate error handling
-3. Implement rate limiting in production
-4. Monitor API usage
-5. Regularly backup trade data
-
-## Interactive Documentation
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-
-
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. **Initialization**: Load configuration, create agents
+2. **Data Gathering**: Fetch real earnings and news from Yahoo Finance
+3. **AI Analysis**: Run AI providers for sentiment, macro, sector analysis
+4. **Intelligence Aggregation**: Combine all insights
+5. **Market Data**: Retrieve stock data via yfinance
+6. **Thesis Generation**: Director creates thesis with intel context
+7. **Quant Analysis**: Quant agent performs numerical analysis
+8. **Risk Assessment**: Risk agent evaluates with all intelligence
+9. **Order Generation**: Execution agent creates trade order
+10. **Output**: Return formatted analysis results
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ## 🙏 Acknowledgments
 
-- [Swarms](https://swarms.ai) for the AI agent framework
-- [Tickr Agent](https://github.com/The-Swarm-Corporation/tickr-agent) for market data integration
-
-## 📞 Support
-
-<!-- - Documentation: [https://autohedge.readthedocs.io](https://autohedge.readthedocs.io) -->
-- Issue Tracker: [GitHub Issues](https://github.com/The-Swarm-Corporation/AutoHedge/issues)
-- Discord: [Join our community](https://swarms.ai)
+- [Crew AI](https://github.com/joaomdmoura/crewAI) for the agent framework
+- [yfinance](https://github.com/ranaroussi/yfinance) for market data and news
 
 ---
-Created with ❤️ by [The Swarm Corporation](https://github.com/The-Swarm-Corporation)
+Created by [The Swarm Corporation](https://github.com/The-Swarm-Corporation)

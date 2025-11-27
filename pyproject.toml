@@ -4,54 +4,53 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "autohedge"
-version = "0.1.0"
-description = "autohedge - TGSC"
+version = "0.2.0"
+description = "AutoHedge - Automated Trading Insights System using Crew AI"
 license = "MIT"
 authors = ["Kye Gomez <kye@apac.ai>"]
 homepage = "https://github.com/The-Swarm-Corporation/AutoHedge"
-documentation = "https://github.com/The-Swarm-Corporation/AutoHedge"  # Add this if you have documentation.
-readme = "README.md"  # Assuming you have a README.md
+readme = "README.md"
 repository = "https://github.com/The-Swarm-Corporation/AutoHedge"
-keywords = ["artificial intelligence", "deep learning", "optimizers", "Prompt Engineering"]
+keywords = ["trading", "ai", "crewai", "hedge-fund", "automation", "insights"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business :: Financial :: Investment",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.9"
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+packages = [
+    { include = "autohedge" }
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-swarms = "*"
-tickr-agent="*"
-pydantic = "*"
+python = "^3.9"
+crewai = "*"
+yfinance = "*"
+pydantic = "^2.0"
 loguru = "*"
-swarm-models = "*"
+python-dotenv = "*"
 
-
-[tool.poetry.group.lint.dependencies]
+[tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
-types-toml = "^0.10.8.1"
-types-redis = "^4.3.21.6"
-types-pytz = "^2023.3.0.0"
 black = "^23.1.0"
-types-chardet = "^5.0.4.6"
-mypy-protobuf = "^3.0.0"
-
-
-[tool.autopep8]
-max_line_length = 80
-ignore = "E501,W6"  # or ["E501", "W6"]
-in-place = true
-recursive = true
-aggressive = 3
-
+pytest = "^7.0"
 
 [tool.ruff]
-line-length = 70
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
 
 [tool.black]
-line-length = 70
-target-version = ['py38']
-preview = true
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
